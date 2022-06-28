@@ -1,0 +1,12 @@
+{
+"name":"Twitch Milker",
+"description":"",
+"version":"1",
+"manifest_version":3,
+"content_scripts": [
+    {
+      "matches": ["https://www.twitch.tv/*"],
+      "js": ["script.js"]
+    }
+  ]
+}
