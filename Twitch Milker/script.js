@@ -1,9 +1,9 @@
-let firstMilking = true;
+// let firstMilking = true;
 let delayClick = 20000;
 let delayPoint = 6500;
 let lastClick = 0;
 let lastPoint = 0;
-let perfStart;
+// let perfStart;
 let lastPointVal = null;
 let dt24 = false;
 let globalTime = { hour: "", min: "", sec: "", amPm: "" };
@@ -18,6 +18,7 @@ console.logTime = function(msg) {
   globalTime.min = date.getMinutes();
   globalTime.sec = date.getSeconds();
   globalTime.hour = (dt24) ? globalTime.hour : (globalTime.hour <= 12 ? globalTime.hour : globalTime.hour - 12);
+  globalTime.hour = (globalTime.hour == 0) ? 12 : globalTime.hour;
   globalTime.min = addLeadingZero(globalTime.min);
   globalTime.sec = addLeadingZero(globalTime.sec);
   globalTime.amPm = (dt24) ? "" : (globalTime.hour < 12 ? "am" : "pm");
@@ -28,18 +29,17 @@ console.logTime = function(msg) {
 let buttonObserver = new MutationObserver(function(mutationList) {
   mutationList.forEach(function(mutation) {
     if (document.contains(document.querySelector('[data-test-selector="community-points-summary"]:not([disabled])') && document.querySelector('button[aria-label="Claim Bonus"]')) && (lastClick + delayClick) < Date.now()) {
-      if (!firstMilking) console.logTime(Math.round(((window.performance.now() - perfStart)/1000)/60).toString() + " minutes since last milking");
-      firstMilking = false;
+      // if (!firstMilking) console.logTime(Math.round(((window.performance.now() - perfStart)/1000)/60).toString() + " minutes since last milking");
+      // firstMilking = false;
       lastClick = Date.now();
 
       let randomWaitTime = (Math.random() * 9197) + 2394;
-      console.logTime("new button to click");
-      console.logTime("waiting " + Math.round(randomWaitTime) + "ms before click");
+      console.logTime("waiting " + Math.round(randomWaitTime) + "ms before milking");
 
       setTimeout(function() {
         document.querySelector('button[aria-label="Claim Bonus"]').click();
-        perfStart = window.performance.now();
-        console.logTime("got milk");
+        // perfStart = window.performance.now();
+        // console.logTime("got milk");
       }, randomWaitTime);
     }
   });
@@ -54,7 +54,7 @@ let pointObserver = new MutationObserver(function(mutationList) {
       pointVal = pointVal.slice(1);
 
       if (lastPoint + delayPoint < Date.now()) {
-        console.logTime("received " + pointVal + " points");
+        console.logTime("got " + pointVal + " milk cartons");
         lastPoint = Date.now();
       }
     }
