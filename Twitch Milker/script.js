@@ -15,11 +15,11 @@ console.logTime = function(msg) {
   globalTime.hour = date.getHours();
   globalTime.min = date.getMinutes();
   globalTime.sec = date.getSeconds();
+  globalTime.amPm = (dt24) ? "" : (globalTime.hour < 12 ? "am" : "pm");
   globalTime.hour = (dt24) ? globalTime.hour : (globalTime.hour <= 12 ? globalTime.hour : globalTime.hour - 12);
   globalTime.hour = (globalTime.hour == 0) ? 12 : globalTime.hour;
   globalTime.min = addLeadingZero(globalTime.min);
   globalTime.sec = addLeadingZero(globalTime.sec);
-  globalTime.amPm = (dt24) ? "" : (globalTime.hour < 12 ? "am" : "pm");
   console.log("%c" + globalTime.hour + ":" + globalTime.min + ":" + globalTime.sec + globalTime.amPm + ":%c " + msg, "font-size: 32px; color: cyan", "font-size: 32px; color: pink");
 }
 
