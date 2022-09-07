@@ -1,0 +1,19 @@
+#root {
+  width: 24em;
+  min-height: 100%;
+  background: var(--bs-indigo);
+  color: pink;
+}
+
+h1 {
+  font-size: 3.5em;
+}
+
+h2 {
+  font-size: 2.5em;
+}
+
+.points {
+  font-size: 8em;
+  line-height: 1em;
+}

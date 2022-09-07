@@ -6,6 +6,7 @@ let randomWaitTime = 0;
 let waitAsHuman = false;
 let dt24 = false;
 let globalTime = { hour: "", min: "", sec: "", amPm: "" };
+let globalCounter = 0;
 let observerOptions = { childList: true, subtree: true };
 
 function addLeadingZero(str) {
@@ -19,10 +20,14 @@ console.logTime = function(msg) {
   globalTime.sec = date.getSeconds();
   globalTime.amPm = (dt24) ? "" : (globalTime.hour < 12 ? "am" : "pm");
   globalTime.hour = (dt24) ? globalTime.hour : (globalTime.hour <= 12 ? globalTime.hour : globalTime.hour - 12);
-  globalTime.hour = (globalTime.hour == 0) ? 12 : globalTime.hour;
+  globalTime.hour = addLeadingZero((globalTime.hour == 0) ? 12 : globalTime.hour);
   globalTime.min = addLeadingZero(globalTime.min);
   globalTime.sec = addLeadingZero(globalTime.sec);
   console.log("%c" + globalTime.hour + ":" + globalTime.min + ":" + globalTime.sec + globalTime.amPm + ":%c " + msg, "font-size: 32px; color: cyan", "font-size: 32px; color: pink");
+}
+
+function setCounter(amt) {
+  globalCounter += Number(amt);
 }
 
 let buttonObserver = new MutationObserver(function(mutationList) {
@@ -30,14 +35,18 @@ let buttonObserver = new MutationObserver(function(mutationList) {
     if (document.contains(document.querySelector('[data-test-selector="community-points-summary"]:not([disabled])') && document.querySelector('button[aria-label="Claim Bonus"]')) && (lastClick + delayClick) < Date.now()) {
       lastClick = Date.now();
 
+      console.logTime("wait as human val: " + waitAsHuman);
       if (waitAsHuman) {
+        console.logTime("setting custom wait time");
         randomWaitTime = (Math.random() * 9197) + 2394;
         console.logTime("waiting " + Math.round(randomWaitTime) + "ms before milking");
       } else {
         randomWaitTime = 0;
       }
+      console.logTime("wait time: " + randomWaitTime);
 
       setTimeout(function() {
+        console.logTime("about to click...");
         document.querySelector('button[aria-label="Claim Bonus"]').click();
       }, randomWaitTime);
     }
@@ -51,6 +60,7 @@ let pointObserver = new MutationObserver(function(mutationList) {
       if (lastPoint + delayPoint < Date.now()) {
         console.logTime(pointVal + " milk cartons");
         lastPoint = Date.now();
+        setCounter(pointVal.slice(1));
       }
     }
   });
@@ -72,3 +82,18 @@ let communitySectionObserver = new MutationObserver(function(mutationList) {
 
 communitySectionObserver.observe(document.body, observerOptions);
 console.log("%crunning twich %cmilker", "font-size: 64px; color: cyan", "font-size: 64px; color: pink");
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  switch(message.type) {
+    case "getCount":
+      sendResponse(globalCounter);
+      break;
+    case "toggleHumanMode":
+      waitAsHuman = message.val;
+      console.logTime("waitAsHuman: " + waitAsHuman)
+      sendResponse({status: 'ok'});
+      break;
+    default:
+      console.error("Unrecognised message: ", message);
+  }
+});
