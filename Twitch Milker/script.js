@@ -2,6 +2,8 @@ let firstRun = true;
 let delayClick = 20000;
 let delayPoint = 6500;
 let lastClick = lastPoint = 0;
+let randomWaitTime = 0;
+let waitAsHuman = false;
 let dt24 = false;
 let globalTime = { hour: "", min: "", sec: "", amPm: "" };
 let observerOptions = { childList: true, subtree: true };
@@ -27,8 +29,13 @@ let buttonObserver = new MutationObserver(function(mutationList) {
   mutationList.forEach(function(mutation) {
     if (document.contains(document.querySelector('[data-test-selector="community-points-summary"]:not([disabled])') && document.querySelector('button[aria-label="Claim Bonus"]')) && (lastClick + delayClick) < Date.now()) {
       lastClick = Date.now();
-      let randomWaitTime = (Math.random() * 9197) + 2394;
-      console.logTime("waiting " + Math.round(randomWaitTime) + "ms before milking");
+
+      if (waitAsHuman) {
+        randomWaitTime = (Math.random() * 9197) + 2394;
+        console.logTime("waiting " + Math.round(randomWaitTime) + "ms before milking");
+      } else {
+        randomWaitTime = 0;
+      }
 
       setTimeout(function() {
         document.querySelector('button[aria-label="Claim Bonus"]').click();
