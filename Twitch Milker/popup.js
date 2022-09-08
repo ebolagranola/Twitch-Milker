@@ -1,41 +1,27 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   let humanModeCheckBox = document.getElementById("humanMode");
-  let humanMode = humanModeCheckBox.checked;
-  console.log('human mode ', humanMode);
 
   function setPointsVal(res) {
     document.querySelector("span#pointVal").innerText = res;
   }
+  
+  const getStorageData = key =>
+    new Promise((resolve, reject) =>
+      chrome.storage.sync.get(key, result =>
+        chrome.runtime.lastError
+          ? reject(Error(chrome.runtime.lastError.message))
+          : resolve(result)
+      )
+    )
 
-  function flipCheckbox(el) {
-    if (el.checked) {
-      el.setAttribute("checked", "");
-    } else {
-      el.removeAttribute("checked");
-    }
-  }
-
-  function setStorage() {
-    chrome.storage.sync.set({
-      humanMode: humanModeCheckBox.checked
-    }, function(items) {
-      flipCheckbox(humanModeCheckBox);
-    });
-  }
-
-  async function getStorage(obj) {
-    await chrome.storage.sync.get(obj, function(items) {
-      console.log(items.humanMode);
-      humanMode = items.humanMode;
-      if (items.humanMode) {
-        humanModeCheckBox.setAttribute("checked", "");
-        console.log("added checked attr");
-      } else {
-        humanModeCheckBox.removeAttribute("checked");
-        console.log("removed checked attr");
-      }
-    });
-  }
+  const setStorageData = data =>
+    new Promise((resolve, reject) =>
+      chrome.storage.sync.set(data, () =>
+        chrome.runtime.lastError
+          ? reject(Error(chrome.runtime.lastError.message))
+          : resolve()
+      )
+    )
 
   function sendMessageToTab(msg, callback) {
     chrome.tabs.query({ active: true, url: "*://*.twitch.tv/*" }).then(tabs => {
@@ -49,15 +35,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  humanModeCheckBox.addEventListener("change", function(e) {
-    console.log('checkbox changed');
-    setStorage();
-    sendMessageToTab({type: "toggleHumanMode", val: humanModeCheckBox.checked});
+  humanModeCheckBox.addEventListener("change", async function(e) {
+    console.log('checkbox changed to: ', humanModeCheckBox.checked);
+    await setStorageData({ humanMode: humanModeCheckBox.checked });
+    humanMode = await getStorageData("humanMode");
+    console.log(humanMode);
+    sendMessageToTab({ type: "toggleHumanMode", val: humanMode.humanMode });
   });
-
-  getStorage("humanMode");
-  sendMessageToTab({type: "getCount"}, setPointsVal);
-  console.log('sending val: ' + humanMode);
-  sendMessageToTab({type: "toggleHumanMode", val: humanMode});
+  
+  sendMessageToTab({ type: "getCount"}, setPointsVal);
+  let humanMode = await getStorageData("humanMode");
+  console.log(humanMode);
+  humanMode.humanMode ? humanModeCheckBox.setAttribute("checked", "") : humanModeCheckBox.removeAttribute("checked");
+  sendMessageToTab({ type: "toggleHumanMode", val: humanMode.humanMode });
 
 });

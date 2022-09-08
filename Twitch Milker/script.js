@@ -90,7 +90,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       break;
     case "toggleHumanMode":
       waitAsHuman = message.val;
-      console.logTime("waitAsHuman: " + waitAsHuman)
+      console.logTime("waitAsHuman: " + waitAsHuman);
       sendResponse({status: 'ok'});
       break;
     default:
