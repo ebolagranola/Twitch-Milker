@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   function setPointsVal(res) {
     document.querySelector("span#pointVal").innerText = res;
   }
-  
+
   const getStorageData = key =>
     new Promise((resolve, reject) =>
       chrome.storage.sync.get(key, result =>
@@ -36,16 +36,13 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 
   humanModeCheckBox.addEventListener("change", async function(e) {
-    console.log('checkbox changed to: ', humanModeCheckBox.checked);
     await setStorageData({ humanMode: humanModeCheckBox.checked });
     humanMode = await getStorageData("humanMode");
-    console.log(humanMode);
     sendMessageToTab({ type: "toggleHumanMode", val: humanMode.humanMode });
   });
-  
+
   sendMessageToTab({ type: "getCount"}, setPointsVal);
   let humanMode = await getStorageData("humanMode");
-  console.log(humanMode);
   humanMode.humanMode ? humanModeCheckBox.setAttribute("checked", "") : humanModeCheckBox.removeAttribute("checked");
   sendMessageToTab({ type: "toggleHumanMode", val: humanMode.humanMode });
 

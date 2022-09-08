@@ -35,18 +35,14 @@ let buttonObserver = new MutationObserver(function(mutationList) {
     if (document.contains(document.querySelector('[data-test-selector="community-points-summary"]:not([disabled])') && document.querySelector('button[aria-label="Claim Bonus"]')) && (lastClick + delayClick) < Date.now()) {
       lastClick = Date.now();
 
-      console.logTime("wait as human val: " + waitAsHuman);
       if (waitAsHuman) {
-        console.logTime("setting custom wait time");
         randomWaitTime = (Math.random() * 9197) + 2394;
         console.logTime("waiting " + Math.round(randomWaitTime) + "ms before milking");
       } else {
         randomWaitTime = 0;
       }
-      console.logTime("wait time: " + randomWaitTime);
 
       setTimeout(function() {
-        console.logTime("about to click...");
         document.querySelector('button[aria-label="Claim Bonus"]').click();
       }, randomWaitTime);
     }
@@ -90,7 +86,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       break;
     case "toggleHumanMode":
       waitAsHuman = message.val;
-      console.logTime("waitAsHuman: " + waitAsHuman);
       sendResponse({status: 'ok'});
       break;
     default:
