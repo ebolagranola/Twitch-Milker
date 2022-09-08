@@ -3,6 +3,7 @@
   min-height: 100%;
   background: var(--bs-indigo);
   color: pink;
+  padding: 16px 0px;
 }
 
 h1 {
@@ -11,6 +12,10 @@ h1 {
 
 h2 {
   font-size: 2.5em;
+}
+
+hr {
+  opacity: 0.5;
 }
 
 .points {
