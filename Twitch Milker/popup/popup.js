@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.querySelector("span#pointVal").innerText = res;
   }
 
-  function getStorageData(key) {
+  const getStorageData = key =>
     new Promise(function(resolve, reject) {
       chrome.storage.local.get(key, (result) =>
         chrome.runtime.lastError
@@ -13,9 +13,8 @@ document.addEventListener('DOMContentLoaded', async function() {
           : resolve(result)
       );
     });
-  }
 
-  function setStorageData(data) {
+  const setStorageData = data =>
     new Promise(function(resolve, reject) {
       chrome.storage.local.set(data, () =>
         chrome.runtime.lastError
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async function() {
           : resolve()
       );
     });
-  }
 
   function sendMessageToTab(msg, callback) {
     chrome.tabs.query({ active: true, url: "*://*.twitch.tv/*" }).then(tabs => {
