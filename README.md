@@ -4,7 +4,7 @@ Never miss a channel point.
 
 ## Description:
 
-Twitch Milker automatically clicks the Channel Points button when it pops up on screen. A short, random amount of time is waited before clicking the button to emulate human interaction. The amount of points obtained and other stats are logged to the console.
+Twitch Milker automatically clicks the Channel Points button when it appears on screen. "Human Mode" can be enabled in the extension menu to wait a short, random amount of time before clicking the button to emulate human interaction. The amount of points obtained for the current page load are updated in the extension menu. Points obtained and other stats are logged to the console.
 
 ## To install:
 
