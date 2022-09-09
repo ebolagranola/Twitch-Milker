@@ -5,23 +5,25 @@ document.addEventListener('DOMContentLoaded', async function() {
     document.querySelector("span#pointVal").innerText = res;
   }
 
-  const getStorageData = key =>
-    new Promise((resolve, reject) =>
-      chrome.storage.local.get(key, result =>
+  function getStorageData(key) {
+    new Promise(function(resolve, reject) {
+      chrome.storage.local.get(key, (result) =>
         chrome.runtime.lastError
           ? reject(Error(chrome.runtime.lastError.message))
           : resolve(result)
-      )
-    )
+      );
+    });
+  }
 
-  const setStorageData = data =>
-    new Promise((resolve, reject) =>
+  function setStorageData(data) {
+    new Promise(function(resolve, reject) {
       chrome.storage.local.set(data, () =>
         chrome.runtime.lastError
           ? reject(Error(chrome.runtime.lastError.message))
           : resolve()
-      )
-    )
+      );
+    });
+  }
 
   function sendMessageToTab(msg, callback) {
     chrome.tabs.query({ active: true, url: "*://*.twitch.tv/*" }).then(tabs => {
