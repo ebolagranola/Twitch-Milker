@@ -46,4 +46,11 @@ document.addEventListener('DOMContentLoaded', async function() {
   humanMode.humanMode ? humanModeCheckBox.setAttribute("checked", "") : humanModeCheckBox.removeAttribute("checked");
   sendMessageToTab({ type: "toggleHumanMode", val: humanMode.humanMode });
 
+  chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+    console.log("setting new points");
+    if (message.newPointVal) {
+      setPointsVal(message.newPointVal);
+    }
+  });
+
 });

@@ -30,6 +30,12 @@ function setCounter(amt) {
   globalCounter += Number(amt);
 }
 
+function sendNewPoints() {
+  chrome.runtime.sendMessage({
+    newPointVal: globalCounter
+  });
+}
+
 let buttonObserver = new MutationObserver(function(mutationList) {
   mutationList.forEach(function(mutation) {
     if (document.contains(document.querySelector('[data-test-selector="community-points-summary"]:not([disabled])') && document.querySelector('button[aria-label="Claim Bonus"]')) && (lastClick + delayClick) < Date.now()) {
@@ -57,6 +63,7 @@ let pointObserver = new MutationObserver(function(mutationList) {
         console.logTime(pointVal + " milk cartons");
         lastPoint = Date.now();
         setCounter(pointVal.slice(1));
+        sendNewPoints();
       }
     }
   });
