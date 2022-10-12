@@ -8,7 +8,7 @@ Twitch Milker automatically clicks the Channel Points button when it appears on 
 
 ## To install:
 
-1. Go to [chrome://extensions](chrome://extensions)
+1. Go to (chrome://extensions)[chrome://extensions]
 2. Turn on "Developer mode" in the top right corner
 3. Click "Load unpacked" in the top left corner
 4. Select the folder named "Twitch Milker" inside the repo
